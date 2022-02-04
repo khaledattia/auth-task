@@ -211,7 +211,7 @@ const Login = () => {
                             placeholder = 'Enter OTP' 
                             name        = 'otp' 
                             onChange    = { (e) => setCode(e.target.value) }/>
-                            <Button disabled = { loading === "idle" ? false : true } type = 'submit' className = 'w-100'>
+                            <Button disabled = { loading === "idle" ? false : true } type = 'submit' className = 'w-100 mb-1'>
                                 {loading === "idle" ? "Confirm" : <Spinner animation="border" />}
                             </Button>
                             <div className='counter'>
