@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
-import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 
 
 const Login = () => {
@@ -15,6 +15,7 @@ const Login = () => {
     const [method, setMethod] = useState("mobile");
     const [counter, setCounter] = useState(90);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState('idle')
 
     const mins = Math.floor(counter/60);
     const secs = Math.floor(counter%60);
@@ -35,14 +36,14 @@ const Login = () => {
             }
         }
     
-    }, [step]);
+    }, [ step ]);
 
     useEffect(() => {
         if( currentUser ) {
             navigate("/");
         };
 
-    }, [currentUser, navigate]);
+    }, [ currentUser, navigate ]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,16 +51,14 @@ const Login = () => {
 
         try{
             setErrors([]);
-            await login(email, password)
+            setLoading("loading");
+            await login(email, password);
+            setLoading("idle");
             navigate("/");
 
-        }catch( err ){
-            console.log(err)
-
-            if(errors.length){
-                return;
-            }
-            setErrors([...errors, "faild to sign in!"]);
+        }catch {
+            setLoading("idle");
+            setErrors(["faild to sign in!"]);
         }
 
     }
@@ -69,10 +68,10 @@ const Login = () => {
         e.preventDefault();
         const regex = /^01[0125][0-9]{8}$/gm
 
-        if(!phoneNumber.trim()){
+        if( !phoneNumber.trim() ) {
             const msg = "Mobile field is require";
 
-            if(!existError(msg)){
+            if( !existError(msg) ){
                 setErrors([msg]);
             }
 
@@ -89,21 +88,27 @@ const Login = () => {
         
         try{
             setErrors([]);
+            setLoading("loading")
             await phoneLogin(phoneNumber);
+            setLoading("idle");
             setStep(2);
-        }catch(err){
-            console.log(err)
+        } catch(err) {
+            setLoading("idle");
             console.log("faild to sign in")
         }
     }
 
     const handleCodeSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
         try {
+            setLoading("loading")
             await confirmCode( code );
+            setLoading("idle")
             navigate("/");
         }catch(err){
             console.log(err)
+            setLoading("idle");
             console.log("faild to sign in")
         }
     }
@@ -172,7 +177,9 @@ const Login = () => {
                                 <Form.Control className='form-control' id = "password" name = "password" type = "password" required onChange = { (e) => setPassword(e.target.value) } />
                             </Form.Group>
 
-                            <Button className = "w-100" type = "submit">Log In</Button>
+                            <Button disabled = { loading === "idle" ? false : true } className = "w-100" type = "submit">
+                                { loading === "idle" ? "Log In" : <Spinner animation="border" /> }
+                            </Button>
                         </Form>
                         <div className='text-center my-4'>
                             Need an account? <Link to = "/sign-up">Sign Up</Link>
@@ -190,7 +197,9 @@ const Login = () => {
                             placeholder = 'Enter mobile Number' 
                             name        = 'mobile' 
                             onChange    = { (e) => setPhoneNumber(e.target.value) }/>
-                            <Button type='submit' className = 'w-100'>Send OTP</Button>
+                            <Button disabled = { loading === "idle" ? false : true } type='submit' className = 'w-100'>
+                                { loading === "idle" ? "Send OTP" : <Spinner animation="border" /> }
+                            </Button>
                         </Form>
 
                         <Form className = {`form ${ step === 2 ? "Active__Step" : "hidden"}`} onSubmit={ handleCodeSubmit }>
@@ -202,7 +211,9 @@ const Login = () => {
                             placeholder = 'Enter OTP' 
                             name        = 'otp' 
                             onChange    = { (e) => setCode(e.target.value) }/>
-                            <Button type = 'submit' className = 'w-100'>Confirm</Button>
+                            <Button disabled = { loading === "idle" ? false : true } type = 'submit' className = 'w-100'>
+                                {loading === "idle" ? "Confirm" : <Spinner animation="border" />}
+                            </Button>
                             <div className='counter'>
                                 {
                                     counter > 0 ? 

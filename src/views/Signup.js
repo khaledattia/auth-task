@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
-import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Alert, Spinner } from 'react-bootstrap';
 
 const Signup = () => {
     const [email, setEmail] = useState("");
@@ -9,6 +9,7 @@ const Signup = () => {
     const [passConfirm, setPassConfirm] = useState("");
     const [errors, setErrors] = useState([]);
     const { signup, currentUser } = useAuth();
+    const [loading, setLoading] = useState('idle');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +28,7 @@ const Signup = () => {
             let msg = "password do not match!";
             
             if( !existError(msg)) {
-                setErrors([...errors, msg]);
+                setErrors([msg]);
             }
 
             return;
@@ -35,11 +36,13 @@ const Signup = () => {
 
         try{
             setErrors([]);
+            setLoading("loading")
             await signup(email, password)
+            setLoading("idle")
             navigate("/");
         }catch( err ){
-            console.log(err)
-            setErrors([...errors, "faild to signup!"]);
+            setLoading("idle")
+            setErrors(["faild to signup!"]);
         }
 
     }
@@ -87,7 +90,9 @@ const Signup = () => {
                         <Form.Control className='form-control' id="password-confirm" type="password" required onChange = { (e) => setPassConfirm(e.target.value) } />
                     </Form.Group>
 
-                    <Button className = "w-100" type = "submit">Sign Up</Button>
+                    <Button disabled = {loading === "idle" ? false : true} className = "w-100" type = "submit">
+                        {loading === "idle" ? "Sign Up" : <Spinner animation="border" />}
+                    </Button>
                 </Form>
             </Card.Body>
             
