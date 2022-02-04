@@ -207,7 +207,7 @@ const Login = () => {
                                 {
                                     counter > 0 ? 
                                     `0${mins}:${secs < 10 ? `0${secs}` : secs} and OTP will be expired` : 
-                                    <span>if you didn't reseve a code you can click&nbsp; 
+                                    <span>if you didn't receive a code you can click&nbsp; 
                                         <span 
                                         className='text-primary'
                                         role = "button" 
