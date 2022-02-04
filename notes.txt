@@ -1,0 +1,36 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCdCbc2TQOYFKRVyQhKgw3xE94zqbNIu0o",
+  authDomain: "auth-development-60106.firebaseapp.com",
+  projectId: "auth-development-60106",
+  storageBucket: "auth-development-60106.appspot.com",
+  messagingSenderId: "636498542026",
+  appId: "1:636498542026:web:d40e959b4e43c3ce10e333"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+
+
+
+
+
+mobile auth
+
+
+import { getAuth, RecaptchaVerifier } from "firebase/auth";
+
+const auth = getAuth();
+window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+  'size': 'invisible',
+  'callback': (response) => {
+    // reCAPTCHA solved, allow signInWithPhoneNumber.
+    onSignInSubmit();
+  }
+}, auth);

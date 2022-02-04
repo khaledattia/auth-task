@@ -11,3 +11,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.phone-panel {
+  position: relative;
+}
+
+.form {
+  position: absolute;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition-property: all;
+  transition-duration: 750ms;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition-timing-function: ease-out;
+  z-index: -1;
+}
+
+.Active__Step {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 600ms;
+  transition-timing-function: ease-in;
+}
+
+.counter {
+  font-size: 0.875rem;
+}
