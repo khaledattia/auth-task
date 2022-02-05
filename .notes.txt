@@ -22,8 +22,6 @@ const app = initializeApp(firebaseConfig);
 
 
 mobile auth
-
-
 import { getAuth, RecaptchaVerifier } from "firebase/auth";
 
 const auth = getAuth();
